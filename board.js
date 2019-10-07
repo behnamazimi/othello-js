@@ -4,7 +4,11 @@ const Cell = require("./cell");
 
 class Board {
 
-    constructor(width = 8) {
+    constructor(options) {
+
+        const {width = 8} = options;
+
+        this.options = options;
         this.width = width;
         this.cells = {};
         this.moves = [];
@@ -21,6 +25,8 @@ class Board {
         }
 
         this.putInitialNuts();
+
+        this.renderOnHTML()
     }
 
     putInitialNuts() {
@@ -31,6 +37,18 @@ class Board {
 
         this.setOwner(centerCord, centerCord - 1, "black");
         this.setOwner(centerCord - 1, centerCord, "black");
+    }
+
+    renderOnHTML() {
+        const {selector = "othella"} = this.options;
+
+        const elm = document.getElementById(selector);
+
+        if (!elm)
+            throw new Error(`Node not found for id ${elm}`)
+
+        elm.appendChild(`<h1>Huuum</h1>`)
+
     }
 
     setOwner(x, y, owner) {
@@ -165,7 +183,7 @@ class Board {
         return this.moves;
     }
 
-    addNutToCrossDirection(nx, ny, dir) {
+    placeNutByCrossDirection(nx, ny, dir) {
 
         const directions = {
             topLeftToNut: (i) => `${nx + i}-${ny + i}`, // x > nx && y > ny
@@ -197,7 +215,7 @@ class Board {
 
     }
 
-    addNutTo(x, y) {
+    placeNutTo(x, y) {
 
         this.findMoves();
 
@@ -206,7 +224,7 @@ class Board {
             throw new Error(`The move [${x},${y}] is not possible!`);
 
         move.directions.forEach((dir) => {
-            this.addNutToCrossDirection(x, y, dir);
+            this.placeNutByCrossDirection(x, y, dir);
         });
 
         this.changeTurn()
@@ -229,11 +247,11 @@ class Board {
 }
 
 const b = new Board(8);
-b.addNutTo(2, 3);
-b.addNutTo(2, 4);
-b.addNutTo(1, 5);
-b.addNutTo(5, 2);
-b.addNutTo(5, 5);
+b.placeNutTo(2, 3);
+b.placeNutTo(2, 4);
+b.placeNutTo(1, 5);
+b.placeNutTo(5, 2);
+b.placeNutTo(5, 5);
 console.log(b.gameResult());
 
 // console.log(b.getBlackNuts());
