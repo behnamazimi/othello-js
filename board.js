@@ -7,6 +7,7 @@ class Board {
     constructor(width = 8) {
         this.width = width;
         this.cells = {};
+        this.moves = [];
         this.turn = "black";
 
         this.initBoard();
@@ -40,6 +41,10 @@ class Board {
         this.cells[`${x}-${y}`].owner = owner;
     }
 
+    changeTurn() {
+        this.turn = this.turn === "white" ? "black" : "white";
+    }
+
     getNuts(type = null) {
         let nuts = [];
         Object.keys(this.cells)
@@ -58,117 +63,180 @@ class Board {
         return this.getNuts("black");
     }
 
+    addMove(x, y, centerNut, direction) {
 
-    getCordPossibleNeighbors(x, y) {
+        let alreadyAdded = false;
+        this.moves.map((move) => {
+            if (move.x === x && move.y === y) {
+                alreadyAdded = true;
+
+                if (move.directions.indexOf(direction) === -1) {
+                    move.directions.push(direction)
+                }
+            }
+        });
+
+        if (!alreadyAdded)
+            this.moves.push({
+                x,
+                y,
+                centerNut,
+                directions: [direction],
+            })
+    }
+
+    getAllNeighbors(x, y) {
         return [
             [x - 1, y - 1], [x - 1, y], [x - 1, y + 1],
             [x, y - 1], [x, y + 1],
             [x + 1, y - 1], [x + 1, y], [x + 1, y + 1]
-        ].filter(([x, y]) => (x > -1 && y > -1) && (x < this.width && y < this.width));
+        ]
+            .filter(([x, y]) => (x > -1 && y > -1) && (x < this.width && y < this.width));
     }
 
     getEmptyNeighborsOfCell(x, y) {
-        let cells = [];
+        let emptyNeighbors = [];
 
-        const neighbors = this.getCordPossibleNeighbors(x, y);
-        neighbors.forEach(([nx, ny]) => {
+        const allNeighbors = this.getAllNeighbors(x, y);
+        allNeighbors.forEach(([nx, ny]) => {
                 if (this.cells[`${nx}-${ny}`].owner === null) {
-                    cells.push(this.cells[`${nx}-${ny}`]);
+                    emptyNeighbors.push(this.cells[`${nx}-${ny}`]);
                 }
             }
         );
 
-        return cells
+        return emptyNeighbors
+    }
+
+    moveCrossDirection(nx, ny, centerNut) {
+
+        const directions = {
+            topLeftToNut: (i) => `${nx + i}-${ny + i}`, // x > nx && y > ny
+            topCenterToNut: (i) => `${nx}-${ny + i}`, // x === nx && y > ny
+            topRightToNut: (i) => `${nx - i}-${ny + i}`, // x < nx && y > ny
+            leftCenterToNut: (i) => `${nx + i}-${ny}`, // x > nx && y === ny
+            rightCenterToNut: (i) => `${nx - i}-${ny}`, // x < nx && y === ny
+            bottomLeftToNut: (i) => `${nx + i}-${ny - i}`, // x > nx && y < ny
+            bottomCenterToNut: (i) => `${nx}-${ny - i}`, // x < nx && y < ny
+            bottomRightToNut: (i) => `${nx - i}-${ny - i}`, // x < nx && y < ny
+        };
+
+        Object.keys(directions).map(dir => {
+            let rivalOnCross = 0;
+            for (let i = 1; i < this.width; i++) {
+                let cell = this.cells[directions[dir](i)];
+
+                if (!cell || cell.owner === null) {
+                    break;
+
+                } else if (cell.owner !== this.turn) {
+                    rivalOnCross++;
+
+                } else if (cell.owner === this.turn && rivalOnCross > 0) {
+                    this.addMove(nx, ny, centerNut, dir);
+                    break;
+                }
+            }
+        })
+
     }
 
     findMoves() {
-        let moves = [];
+        this.moves = [];
         let nuts = [];
         if (this.turn === "white")
             nuts = this.getBlackNuts();
         else
             nuts = this.getWhiteNuts();
 
-        // nuts.forEach((nut) => {
-        const [x, y] = nuts[0].pos();
-        const neighbors = this.getEmptyNeighborsOfCell(x, y);
+        nuts.forEach((nut) => {
+            const [x, y] = nut.pos();
+            const neighbors = this.getEmptyNeighborsOfCell(x, y);
 
-        neighbors.forEach((neighbor) => {
-            const [nx, ny] = neighbor.pos();
+            neighbors.forEach((neighbor) => {
+                const [nx, ny] = neighbor.pos();
 
-            for (let i = 1; i < this.width; i++) {
-                let cell;
+                this.moveCrossDirection(nx, ny, [x, y]);
 
-                if (x > nx && y > ny) {
-                    cell = this.cells[`${nx + i}-${ny + i}`];
-
-                    if (cell && cell.owner === this.turn) {
-                        if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c1 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
-                    } else break;
-
-                } else if (x < nx && y < ny) {
-                    cell = this.cells[`${nx - i}-${ny - i}`];
-                    if (cell && cell.owner === this.turn) {
-                        if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c2 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
-                    } else break;
-
-                } else if (x === nx && y > ny) {
-                    cell = this.cells[`${nx}-${ny - i}`];
-                    if (cell && cell.owner === this.turn) {
-                        if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c3 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
-                    } else break;
-
-                } else if (x < nx && y > ny) {
-                    cell = this.cells[`${nx - i}-${ny + i}`];
-                    if (cell && cell.owner === this.turn) {
-                        if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c4 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
-                    } else break;
-
-                } else if (y < ny && x === nx) {
-                    cell = this.cells[`${nx}-${ny + i}`];
-                    if (cell && cell.owner === this.turn) {
-                        if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c5 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
-                    } else break;
-
-                } else if (x < nx && y === y) {
-                    cell = this.cells[`${nx - i}-${ny}`];
-                    if (cell && cell.owner === this.turn) {
-                        if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c6 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
-                    } else break;
-
-                } else if (x > nx && y === ny) {
-                    cell = this.cells[`${nx + i}-${ny}`];
-                    if (cell && cell.owner === this.turn) {
-                        if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c7 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
-                    } else break;
-
-                } else if (x > nx && y < ny) {
-                    cell = this.cells[`${nx + i}-${ny - i}`];
-                    if (cell && cell.owner === this.turn) {
-                        if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c8 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
-                    } else break;
-
-                }
-
-            }
+            });
 
         });
 
-        // });
+        return this.moves;
+    }
 
-        return moves;
+    addNutToCrossDirection(nx, ny, dir) {
+
+        const directions = {
+            topLeftToNut: (i) => `${nx + i}-${ny + i}`, // x > nx && y > ny
+            topCenterToNut: (i) => `${nx}-${ny + i}`, // x === nx && y > ny
+            topRightToNut: (i) => `${nx - i}-${ny + i}`, // x < nx && y > ny
+            leftCenterToNut: (i) => `${nx + i}-${ny}`, // x > nx && y === ny
+            rightCenterToNut: (i) => `${nx - i}-${ny}`, // x < nx && y === ny
+            bottomLeftToNut: (i) => `${nx + i}-${ny - i}`, // x > nx && y < ny
+            bottomCenterToNut: (i) => `${nx}-${ny - i}`, // x < nx && y < ny
+            bottomRightToNut: (i) => `${nx - i}-${ny - i}`, // x < nx && y < ny
+        };
+
+        for (let i = 0; i < this.width; i++) {
+            let cell = this.cells[directions[dir](i)];
+            // console.log(dir, [nx, ny], cell);
+            if (!cell) {
+                break;
+
+            } else if (cell.owner !== this.turn) {
+                cell.owner = this.turn;
+
+            } else if (cell.owner === this.turn) {
+                break;
+
+            } else if (cell.owner === null) {
+                break
+            }
+        }
+
+    }
+
+    addNutTo(x, y) {
+
+        this.findMoves();
+
+        const move = this.moves.find(move => move.x === x && move.y === y);
+        if (!move || !move.x)
+            throw new Error(`The move [${x},${y}] is not possible!`);
+
+        move.directions.forEach((dir) => {
+            this.addNutToCrossDirection(x, y, dir);
+        });
+
+        this.changeTurn()
+
+    }
+
+    gameResult() {
+        const white = this.getWhiteNuts().length,
+            black = this.getBlackNuts().length;
+
+        return {
+            white,
+            black,
+            winner: white > black ? "white" :
+                black > white ?
+                    "black" : "equal"
+        };
+
     }
 }
 
 const b = new Board(8);
-console.log(b.findMoves());
+b.addNutTo(2, 3);
+b.addNutTo(2, 4);
+b.addNutTo(1, 5);
+b.addNutTo(5, 2);
+b.addNutTo(5, 5);
+console.log(b.gameResult());
+
+// console.log(b.getBlackNuts());
+// console.log(b.getWhiteNuts());
 
 module.exports = Board;
