@@ -7,7 +7,6 @@ class Board {
     constructor(width = 8) {
         this.width = width;
         this.cells = {};
-        this.moves = [];
         this.turn = "black";
 
         this.initBoard();
@@ -91,68 +90,73 @@ class Board {
             nuts = this.getWhiteNuts();
 
         // nuts.forEach((nut) => {
-        const [x, y] = nuts[1].pos();
+        const [x, y] = nuts[0].pos();
         const neighbors = this.getEmptyNeighborsOfCell(x, y);
 
         neighbors.forEach((neighbor) => {
             const [nx, ny] = neighbor.pos();
 
-            for (let i = 0; i < this.width; i++) {
+            for (let i = 1; i < this.width; i++) {
                 let cell;
 
-                console.log(x, y, nx, ny);
                 if (x > nx && y > ny) {
                     cell = this.cells[`${nx + i}-${ny + i}`];
+
                     if (cell && cell.owner === this.turn) {
                         if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c1 ${i} ${nx}-${ny}`)
-                    }
-                }
+                            moves.push(`c1 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
+                    } else break;
 
-                // cell = this.cells[`${nx - i}-${ny - i}`];
-                // if (cell && cell.owner === this.turn) {
-                //     if (!moves.includes(`${nx}-${ny}`))
-                //         moves.push(`c2 ${i} ${nx}-${ny}`)
-                // }
+                } else if (x < nx && y < ny) {
+                    cell = this.cells[`${nx - i}-${ny - i}`];
+                    if (cell && cell.owner === this.turn) {
+                        if (!moves.includes(`${nx}-${ny}`))
+                            moves.push(`c2 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
+                    } else break;
 
-                if (x === nx && y < ny) {
+                } else if (x === nx && y > ny) {
                     cell = this.cells[`${nx}-${ny - i}`];
                     if (cell && cell.owner === this.turn) {
                         if (!moves.includes(`${nx}-${ny}`))
-                            moves.push(`c3 ${i} ${nx}-${ny}`)
-                    }
+                            moves.push(`c3 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
+                    } else break;
+
+                } else if (x < nx && y > ny) {
+                    cell = this.cells[`${nx - i}-${ny + i}`];
+                    if (cell && cell.owner === this.turn) {
+                        if (!moves.includes(`${nx}-${ny}`))
+                            moves.push(`c4 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
+                    } else break;
+
+                } else if (y < ny && x === nx) {
+                    cell = this.cells[`${nx}-${ny + i}`];
+                    if (cell && cell.owner === this.turn) {
+                        if (!moves.includes(`${nx}-${ny}`))
+                            moves.push(`c5 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
+                    } else break;
+
+                } else if (x < nx && y === y) {
+                    cell = this.cells[`${nx - i}-${ny}`];
+                    if (cell && cell.owner === this.turn) {
+                        if (!moves.includes(`${nx}-${ny}`))
+                            moves.push(`c6 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
+                    } else break;
+
+                } else if (x > nx && y === ny) {
+                    cell = this.cells[`${nx + i}-${ny}`];
+                    if (cell && cell.owner === this.turn) {
+                        if (!moves.includes(`${nx}-${ny}`))
+                            moves.push(`c7 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
+                    } else break;
+
+                } else if (x > nx && y < ny) {
+                    cell = this.cells[`${nx + i}-${ny - i}`];
+                    if (cell && cell.owner === this.turn) {
+                        if (!moves.includes(`${nx}-${ny}`))
+                            moves.push(`c8 "${nx + "," + ny}" ${i} ${nx}-${ny}`)
+                    } else break;
+
                 }
-
-                // cell = this.cells[`${nx}-${ny + i}`];
-                // if (cell && cell.owner === this.turn) {
-                //     if (!moves.includes(`${nx}-${ny}`))
-                //         moves.push(`c5 ${i} ${nx}-${ny}`)
-                // }
-                //
-                // cell = this.cells[`${nx - i}-${ny}`];
-                // if (cell && cell.owner === this.turn) {
-                //     if (!moves.includes(`${nx}-${ny}`))
-                //         moves.push(`c6 ${i} ${nx}-${ny}`)
-                // }
-                //
-                // cell = this.cells[`${nx + i}-${ny}`];
-                // if (cell && cell.owner === this.turn) {
-                //     if (!moves.includes(`${nx}-${ny}`))
-                //         moves.push(`c7 ${i} ${nx}-${ny}`)
-                // }
-                //
-                // cell = this.cells[`${nx + i}-${ny - i}`];
-                // if (cell && cell.owner === this.turn) {
-                //     if (!moves.includes(`${nx}-${ny}`))
-                //         moves.push(`c8 ${i} ${nx}-${ny}`)
-                // }
-                //
-                // cell = this.cells[`${nx - i}-${ny + i}`];
-                // if (cell && cell.owner === this.turn) {
-                //     if (!moves.includes(`${nx}-${ny}`))
-                //         moves.push(`${nx}-${ny}`)
-                // }
-
 
             }
 
