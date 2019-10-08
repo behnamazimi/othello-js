@@ -4,15 +4,12 @@ const Cell = require("./cell");
 
 class Board {
 
-    constructor(options) {
+    constructor(width) {
 
-        const {width = 8} = options;
-
-        this.options = options;
         this.width = width;
         this.cells = {};
         this.moves = [];
-        this.turn = "black";
+        this._turn = "black";
 
         this.initBoard();
     }
@@ -25,8 +22,6 @@ class Board {
         }
 
         this.putInitialNuts();
-
-        this.renderOnHTML()
     }
 
     putInitialNuts() {
@@ -37,18 +32,16 @@ class Board {
 
         this.setOwner(centerCord, centerCord - 1, "black");
         this.setOwner(centerCord - 1, centerCord, "black");
+
+        this.findMoves();
     }
 
-    renderOnHTML() {
-        const {selector = "othella"} = this.options;
+    get turn() {
+        return this._turn
+    }
 
-        const elm = document.getElementById(selector);
-
-        if (!elm)
-            throw new Error(`Node not found for id ${elm}`)
-
-        elm.appendChild(`<h1>Huuum</h1>`)
-
+    getCell(x, y) {
+        return this.cells[`${x}-${y}`]
     }
 
     setOwner(x, y, owner) {
@@ -60,13 +53,13 @@ class Board {
     }
 
     changeTurn() {
-        this.turn = this.turn === "white" ? "black" : "white";
+        this._turn = this._turn === "white" ? "black" : "white";
     }
 
     getNuts(type = null) {
         let nuts = [];
         Object.keys(this.cells)
-            .forEach(key => {
+            .map(key => {
                 if ((!type && this.cells[key].owner !== null) || (type && this.cells[key].owner === type))
                     nuts.push(this.cells[key]);
             });
@@ -116,7 +109,7 @@ class Board {
         let emptyNeighbors = [];
 
         const allNeighbors = this.getAllNeighbors(x, y);
-        allNeighbors.forEach(([nx, ny]) => {
+        allNeighbors.map(([nx, ny]) => {
                 if (this.cells[`${nx}-${ny}`].owner === null) {
                     emptyNeighbors.push(this.cells[`${nx}-${ny}`]);
                 }
@@ -141,17 +134,20 @@ class Board {
 
         Object.keys(directions).map(dir => {
             let rivalOnCross = 0;
-            for (let i = 1; i < this.width; i++) {
+            for (let i = 0; i < this.width; i++) {
                 let cell = this.cells[directions[dir](i)];
 
-                if (!cell || cell.owner === null) {
+                if (!cell) {
                     break;
 
-                } else if (cell.owner !== this.turn) {
+                } else if (cell.owner !== this._turn && cell.owner !== null) {
                     rivalOnCross++;
 
-                } else if (cell.owner === this.turn && rivalOnCross > 0) {
+                } else if (cell.owner === this._turn && rivalOnCross > 0) {
                     this.addMove(nx, ny, centerNut, dir);
+                    break;
+
+                } else if (i === 1 && (cell.owner === this._turn || cell.owner === null)) {
                     break;
                 }
             }
@@ -161,29 +157,28 @@ class Board {
 
     findMoves() {
         this.moves = [];
-        let nuts = [];
-        if (this.turn === "white")
+
+        let nuts;
+        if (this._turn === "white")
             nuts = this.getBlackNuts();
         else
             nuts = this.getWhiteNuts();
 
-        nuts.forEach((nut) => {
+        nuts.map((nut) => {
             const [x, y] = nut.pos();
             const neighbors = this.getEmptyNeighborsOfCell(x, y);
 
-            neighbors.forEach((neighbor) => {
+            neighbors.map((neighbor) => {
                 const [nx, ny] = neighbor.pos();
 
                 this.moveCrossDirection(nx, ny, [x, y]);
-
             });
 
         });
 
-        return this.moves;
     }
 
-    placeNutByCrossDirection(nx, ny, dir) {
+    findCellToChangeByCross(nx, ny, dir) {
 
         const directions = {
             topLeftToNut: (i) => `${nx + i}-${ny + i}`, // x > nx && y > ny
@@ -196,38 +191,52 @@ class Board {
             bottomRightToNut: (i) => `${nx - i}-${ny - i}`, // x < nx && y < ny
         };
 
-        for (let i = 0; i < this.width; i++) {
+        let cellToChange = [];
+
+        for (let i = 0; i <= this.width; i++) {
             let cell = this.cells[directions[dir](i)];
-            // console.log(dir, [nx, ny], cell);
+
             if (!cell) {
                 break;
 
-            } else if (cell.owner !== this.turn) {
-                cell.owner = this.turn;
+            } else if (cell.owner !== this._turn) {
+                cellToChange.push(cell);
 
-            } else if (cell.owner === this.turn) {
+            } else if (cell.owner === this._turn || cell.owner === null) {
                 break;
 
-            } else if (cell.owner === null) {
-                break
             }
         }
 
+        return cellToChange
+
+    }
+
+    isValidMove(x, y) {
+        return this.moves.find(move => move.x === x && move.y === y) !== undefined
     }
 
     placeNutTo(x, y) {
 
-        this.findMoves();
-
         const move = this.moves.find(move => move.x === x && move.y === y);
-        if (!move || !move.x)
-            throw new Error(`The move [${x},${y}] is not possible!`);
+        if (!move)
+            throw new Error(`The move [${x},${y}] is impossible!`);
 
-        move.directions.forEach((dir) => {
-            this.placeNutByCrossDirection(x, y, dir);
+        let cellsToChange = [];
+        move.directions.map((dir) => {
+            cellsToChange = [...cellsToChange, ...this.findCellToChangeByCross(x, y, dir)];
         });
 
-        this.changeTurn()
+        cellsToChange.map(cell => cell.owner = this._turn);
+
+        this.changeTurn();
+        this.findMoves();
+
+        if (this.moves.length === 0) {
+            console.log(`from == bottom ==>> turn change from ${this._turn} to ${this._turn === "white" ? "black" : "white"}`);
+            this.changeTurn();
+            this.findMoves();
+        }
 
     }
 
