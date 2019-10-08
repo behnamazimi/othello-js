@@ -41,22 +41,22 @@ class OthelloGame {
             this.elm.appendChild(boardRowElm)
         }
 
-        this.handleCellClick(2, 3)();
-        this.handleCellClick(2, 2)();
-        this.handleCellClick(3, 2)();
-        this.handleCellClick(2, 4)();
-        this.handleCellClick(1, 5)();
-        this.handleCellClick(1, 4)();
-        this.handleCellClick(1, 3)();
-        this.handleCellClick(1, 2)();
-        this.handleCellClick(1, 1)();
-        this.handleCellClick(2, 1)();
-        this.handleCellClick(1, 0)();
-        this.handleCellClick(3, 1)();
-        this.handleCellClick(4, 0)();
-        this.handleCellClick(2, 0)();
-        this.handleCellClick(3, 0)();
-        this.handleCellClick(4, 2)();
+        // this.handleCellClick(2, 3)();
+        // this.handleCellClick(2, 2)();
+        // this.handleCellClick(3, 2)();
+        // this.handleCellClick(2, 4)();
+        // this.handleCellClick(1, 5)();
+        // this.handleCellClick(1, 4)();
+        // this.handleCellClick(1, 3)();
+        // this.handleCellClick(1, 2)();
+        // this.handleCellClick(1, 1)();
+        // this.handleCellClick(2, 1)();
+        // this.handleCellClick(1, 0)();
+        // this.handleCellClick(3, 1)();
+        // this.handleCellClick(4, 0)();
+        // this.handleCellClick(2, 0)();
+        // this.handleCellClick(3, 0)();
+        // this.handleCellClick(4, 2)();
 
         // this.handleCellClick(2, 4)()
         // this.handleCellClick(1, 5)()
