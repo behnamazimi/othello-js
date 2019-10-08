@@ -1,26 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4b45d6f0-01a1-4d2a-b4bb-274cc66a5c94" name="Default Changelist" comment="" />
+    <list default="true" id="4b45d6f0-01a1-4d2a-b4bb-274cc66a5c94" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/index.js.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/board.js" beforeDir="false" afterPath="$PROJECT_DIR$/board.js" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/board.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="192">
+              <caret line="49" column="34" selection-start-line="49" selection-start-column="34" selection-end-line="49" selection-end-column="34" />
+              <folding>
+                <element signature="e#296#430#0" />
+                <element signature="e#347#420#0" />
+                <element signature="n#!!block;n#putInitialNuts#0;n#Board#0" />
+                <element signature="n#!!block;n#setOwner#0;n#Board#0" />
+                <element signature="e#863#950#0" />
+                <element signature="n#!!block;n#changeTurn#0;n#Board#0" />
+                <element signature="n#!!block;n#getNuts#0;n#Board#0" />
+                <element signature="e#1116#1286#0" />
+                <element signature="n#!!block;n#getWhiteNuts#0;n#Board#0" />
+                <element signature="n#!!block;n#getBlackNuts#0;n#Board#0" />
+                <element signature="n#!!block;n#addMove#0;n#Board#0" />
+                <element signature="e#1553#1577#0" />
+                <element signature="e#1601#1653#0" />
+                <element signature="e#1723#1763#0" />
+                <element signature="e#1640#1666#0" />
+                <element signature="n#!!block;n#getCordPossibleNeighbors#0;n#Board#0" />
+                <element signature="e#1502#1660#0" />
+                <element signature="n#!!block;n#getEmptyNeighborsOfCell#0;n#Board#0" />
+                <element signature="e#1910#2066#0" />
+                <element signature="e#1974#2052#0" />
+                <element signature="n#!!block;n#moveCrossDirection#0;n#Board#0" />
+                <element signature="e#2515#3146#0" />
+                <element signature="e#2908#3406#0" />
+                <element signature="e#2993#3396#0" />
+                <element signature="e#2302#2348#0" />
+                <element signature="e#2969#2988#0" />
+                <element signature="e#3300#3382#0" />
+                <element signature="n#!!block;n#findMoves#0;n#Board#0" />
+                <element signature="e#3619#3878#0" />
+                <element signature="e#3049#6985#0" />
+                <element signature="n#!!block;n#addNutToCrossDirection#0;n#Board#0" />
+                <element signature="e#4593#5224#0" />
+                <element signature="e#5355#5780#0" />
+                <element signature="e#5467#5514#0" />
+                <element signature="e#5550#5606#0" />
+                <element signature="e#5662#5766#0" />
+                <element signature="e#5764#5796#0" />
+                <element signature="n#!!block;n#addNutTo#0;n#Board#0" />
+                <element signature="e#4809#4833#0" />
+                <element signature="n#!!block;n#gameResult#0;n#Board#0" />
+                <element signature="e#6269#6385#0" />
+                <element signature="e#6686#6719#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>addMove</find>
+      <find>moveCrossDirection</find>
+      <find>his.moves.find((</find>
+      <find>===</find>
+      <find>===&gt;</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/index.js.html" />
+        <option value="$PROJECT_DIR$/board.js" />
+      </list>
+    </option>
+  </component>
+<<<<<<< HEAD
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1RsK9TeuquO0DhhrcCAsZuAR9bP" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+=======
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+    <option name="x" value="170" />
+    <option name="y" value="91" />
+    <option name="width" value="1026" />
+    <option name="height" value="546" />
+  </component>
+  <component name="ProjectId" id="1RsK9TeuquO0DhhrcCAsZuAR9bP" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="othello-js" type="b2602c69:ProjectViewProjectNode" />
+              <item name="othello-js" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+>>>>>>> 79833198d9e55d52ce9b63d844f82a80334abb07
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
@@ -52,11 +164,121 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1570450211352</updated>
+<<<<<<< HEAD
       <workItem from="1570450212434" duration="12569000" />
+=======
+      <workItem from="1570450212434" duration="12511000" />
+      <workItem from="1570473685205" duration="12975000" />
+>>>>>>> 79833198d9e55d52ce9b63d844f82a80334abb07
     </task>
     <servers />
   </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="12975000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="0" width="1366" height="768" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Favorites" order="0" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.25" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.22928177" />
+      <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="2" />
+      <window_info anchor="bottom" id="Docker" order="3" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Message" order="4" />
+      <window_info anchor="bottom" id="Find" order="5" />
+      <window_info anchor="bottom" id="Run" order="6" />
+      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="Favorites" order="0" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.25" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.25138122" />
+      <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="2" />
+      <window_info anchor="bottom" id="Docker" order="3" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Message" order="4" />
+      <window_info anchor="bottom" id="Find" order="5" />
+      <window_info anchor="bottom" id="Run" order="6" />
+      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="10" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
+  </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/index.js.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="8" column="16" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/board.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="49" column="34" selection-start-line="49" selection-start-column="34" selection-end-line="49" selection-end-column="34" />
+          <folding>
+            <element signature="e#296#430#0" />
+            <element signature="e#347#420#0" />
+            <element signature="n#!!block;n#putInitialNuts#0;n#Board#0" />
+            <element signature="n#!!block;n#setOwner#0;n#Board#0" />
+            <element signature="e#863#950#0" />
+            <element signature="n#!!block;n#changeTurn#0;n#Board#0" />
+            <element signature="n#!!block;n#getNuts#0;n#Board#0" />
+            <element signature="e#1116#1286#0" />
+            <element signature="n#!!block;n#getWhiteNuts#0;n#Board#0" />
+            <element signature="n#!!block;n#getBlackNuts#0;n#Board#0" />
+            <element signature="n#!!block;n#addMove#0;n#Board#0" />
+            <element signature="e#1553#1577#0" />
+            <element signature="e#1601#1653#0" />
+            <element signature="e#1723#1763#0" />
+            <element signature="e#1640#1666#0" />
+            <element signature="n#!!block;n#getCordPossibleNeighbors#0;n#Board#0" />
+            <element signature="e#1502#1660#0" />
+            <element signature="n#!!block;n#getEmptyNeighborsOfCell#0;n#Board#0" />
+            <element signature="e#1910#2066#0" />
+            <element signature="e#1974#2052#0" />
+            <element signature="n#!!block;n#moveCrossDirection#0;n#Board#0" />
+            <element signature="e#2515#3146#0" />
+            <element signature="e#2908#3406#0" />
+            <element signature="e#2993#3396#0" />
+            <element signature="e#2302#2348#0" />
+            <element signature="e#2969#2988#0" />
+            <element signature="e#3300#3382#0" />
+            <element signature="n#!!block;n#findMoves#0;n#Board#0" />
+            <element signature="e#3619#3878#0" />
+            <element signature="e#3049#6985#0" />
+            <element signature="n#!!block;n#addNutToCrossDirection#0;n#Board#0" />
+            <element signature="e#4593#5224#0" />
+            <element signature="e#5355#5780#0" />
+            <element signature="e#5467#5514#0" />
+            <element signature="e#5550#5606#0" />
+            <element signature="e#5662#5766#0" />
+            <element signature="e#5764#5796#0" />
+            <element signature="n#!!block;n#addNutTo#0;n#Board#0" />
+            <element signature="e#4809#4833#0" />
+            <element signature="n#!!block;n#gameResult#0;n#Board#0" />
+            <element signature="e#6269#6385#0" />
+            <element signature="e#6686#6719#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
