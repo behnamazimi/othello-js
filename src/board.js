@@ -10,6 +10,7 @@ class Board {
         this.cells = {};
         this.moves = [];
         this._turn = "black";
+        this._end = false;
 
         this.initBoard();
     }
@@ -34,6 +35,10 @@ class Board {
         this.setOwner(centerCord - 1, centerCord, "black");
 
         this.findMoves();
+    }
+
+    get end() {
+        return this._end
     }
 
     get turn() {
@@ -96,13 +101,17 @@ class Board {
             })
     }
 
+    isOnBoard(x, y) {
+        return (x > -1 && y > -1) && (x < this.width && y < this.width)
+    }
+
     getAllNeighbors(x, y) {
         return [
             [x - 1, y - 1], [x - 1, y], [x - 1, y + 1],
             [x, y - 1], [x, y + 1],
             [x + 1, y - 1], [x + 1, y], [x + 1, y + 1]
         ]
-            .filter(([x, y]) => (x > -1 && y > -1) && (x < this.width && y < this.width));
+            .filter(([x, y]) => this.isOnBoard(x, y));
     }
 
     getEmptyNeighborsOfCell(x, y) {
@@ -149,6 +158,9 @@ class Board {
 
                 } else if (i === 1 && (cell.owner === this._turn || cell.owner === null)) {
                     break;
+
+                } else if (rivalOnCross > 0 && cell.owner === null) {
+                    break;
                 }
             }
         })
@@ -167,6 +179,8 @@ class Board {
         nuts.map((nut) => {
             const [x, y] = nut.pos();
             const neighbors = this.getEmptyNeighborsOfCell(x, y);
+
+            console.log(neighbors);
 
             neighbors.map((neighbor) => {
                 const [nx, ny] = neighbor.pos();
@@ -233,9 +247,12 @@ class Board {
         this.findMoves();
 
         if (this.moves.length === 0) {
-            console.log(`from == bottom ==>> turn change from ${this._turn} to ${this._turn === "white" ? "black" : "white"}`);
+            // console.log(`from == bottom ==>> turn change from ${this._turn} to ${this._turn === "white" ? "black" : "white"}`);
             this.changeTurn();
             this.findMoves();
+
+            if (this.moves.length === 0)
+                this._end = true;
         }
 
     }

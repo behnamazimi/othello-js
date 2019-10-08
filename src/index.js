@@ -4,7 +4,7 @@ class OthelloGame {
 
     defaultOptions = {
         width: 8,
-        cellMaxWidth: 50,
+        cellMaxWidth: 80,
         selector: "othello",
         cellBGColor: "#43a047",
     };
@@ -42,25 +42,6 @@ class OthelloGame {
         }
 
         // this.handleCellClick(2, 3)();
-        // this.handleCellClick(2, 2)();
-        // this.handleCellClick(3, 2)();
-        // this.handleCellClick(2, 4)();
-        // this.handleCellClick(1, 5)();
-        // this.handleCellClick(1, 4)();
-        // this.handleCellClick(1, 3)();
-        // this.handleCellClick(1, 2)();
-        // this.handleCellClick(1, 1)();
-        // this.handleCellClick(2, 1)();
-        // this.handleCellClick(1, 0)();
-        // this.handleCellClick(3, 1)();
-        // this.handleCellClick(4, 0)();
-        // this.handleCellClick(2, 0)();
-        // this.handleCellClick(3, 0)();
-        // this.handleCellClick(4, 2)();
-
-        // this.handleCellClick(2, 4)()
-        // this.handleCellClick(1, 5)()
-        // this.handleCellClick(1, 4)()
 
     }
 
@@ -106,7 +87,12 @@ class OthelloGame {
 
     handleCellClick(x, y) {
         return (e) => {
-            console.log(this.board.moves);
+
+            if (this.board.end) {
+                console.log(this.board.gameResult());
+                return;
+            }
+
             this.board.placeNutTo(x, y);
             this.reRender();
         }
@@ -131,6 +117,4 @@ class OthelloGame {
 
 }
 
-console.time("BOARD_INIT");
 const OG = new OthelloGame();
-console.timeEnd("BOARD_INIT");
