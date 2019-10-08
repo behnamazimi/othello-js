@@ -15,7 +15,7 @@ class OthelloGame {
 
         this.board = new Board(this.options.width);
 
-        this.initGame()
+        this.initGame();
     }
 
     initGame() {
@@ -86,9 +86,9 @@ class OthelloGame {
     }
 
     handleCellClick(x, y) {
-        return (e) => {
+        return () => {
 
-            if (this.board.end) {
+            if (this.board.finished) {
                 console.log(this.board.gameResult());
                 return;
             }
