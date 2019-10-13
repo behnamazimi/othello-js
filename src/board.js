@@ -148,8 +148,9 @@ class Board {
      * @param {number} y - Cell y coordinates
      * @param {array} centerNut - To specify that which nut has responsible for the move
      * @param {string} direction - To specify the cross direction that find this move
+     * @param relatedCells
      */
-    addMove(x, y, centerNut, direction) {
+    addMove(x, y, centerNut, direction, relatedCells) {
 
         let alreadyAdded = false;
         this.moves.map((move) => {
@@ -157,7 +158,8 @@ class Board {
                 alreadyAdded = true;
 
                 if (move.directions.indexOf(direction) === -1) {
-                    move.directions.push(direction)
+                    move.directions.push(direction);
+                    move.relatedCells = [...move.relatedCells, ...relatedCells]
                 }
             }
         });
@@ -167,6 +169,7 @@ class Board {
                 x,
                 y,
                 centerNut,
+                relatedCells,
                 directions: [direction],
             })
     }
@@ -203,119 +206,68 @@ class Board {
     }
 
     /**
-     * It's some how complicated! :(
-     *
-     * @param cx
-     * @param cy
-     * @returns {object}
-     */
-    crossAxises(cx, cy) {
-        return {
-            topLeftToCell: (i) => `${cx + i}-${cy + i}`,        // x > cx && y > cy
-            topCenterToCell: (i) => `${cx}-${cy + i}`,          // x === cx && y > cy
-            topRightToCell: (i) => `${cx - i}-${cy + i}`,       // x < cx && y > cy
-            leftCenterToCell: (i) => `${cx + i}-${cy}`,         // x > cx && y === cy
-            rightCenterToCell: (i) => `${cx - i}-${cy}`,        // x < cx && y === cy
-            bottomLeftToCell: (i) => `${cx + i}-${cy - i}`,     // x > cx && y < cy
-            bottomCenterToCell: (i) => `${cx}-${cy - i}`,       // x < cx && y < cy
-            bottomRightToCell: (i) => `${cx - i}-${cy - i}`,    // x < cx && y < cy
-        };
-    }
-
-    /**
-     * Test all cross directions to a center cell (from neighbors) and find valid moves
-     *
-     * @param {number} cx
-     * @param {number} cy
-     * @param {array} centerNut - To determine that which cell is the center cell
-     */
-    crossAllDirectionsToCell(cx, cy, centerNut) {
-
-        const directions = this.crossAxises(cx, cy);
-
-        Object.keys(directions).map(dir => {
-            let rivalNutsOnCross = 0;
-            for (let i = 0; i < this.width; i++) {
-
-                let cell = this.cells[directions[dir](i)];
-                if (!cell) break;
-
-
-                if (cell.owner !== this.turn && cell.owner !== null) {
-                    rivalNutsOnCross++;
-
-                } else if (cell.owner === this.turn && rivalNutsOnCross > 0) {
-                    this.addMove(cx, cy, centerNut, dir);
-                    break;
-
-                } else if (i === 1 && (cell.owner === this.turn || cell.owner === null)) {
-                    break;
-
-                } else if (rivalNutsOnCross > 0 && cell.owner === null) {
-                    break;
-                }
-            }
-        })
-
-    }
-
-    /**
      * Find all possible moves of the board for *current turn*
      */
     findMoves() {
+
         this.moves = [];
 
         let nuts;
-        if (this.turn === "white")
+        let rival = "white";
+        if (this.turn === "white") {
             nuts = this.getBlackNuts();
-        else
+            rival = "black"
+        } else {
             nuts = this.getWhiteNuts();
-
-
-        nuts.map((nut) => {
-            const [x, y] = nut.pos();
-            const neighbors = this.getEmptyNeighborsOfCell(x, y);
-
-            neighbors.map((neighbor) => {
-                const [nx, ny] = neighbor.pos();
-
-                this.crossAllDirectionsToCell(nx, ny, [x, y]);
-            });
-
-        });
-
-    }
-
-    /**
-     * Find all cells that must flip on a placement
-     *
-     * @param {number} nx - The X coordinate of the flipping cell
-     * @param {number} ny - The Y coordinate of the flipping cell
-     * @param {string} dir
-     * @returns {Array}
-     */
-    findCellsToFlip(nx, ny, dir) {
-
-        const directions = this.crossAxises(nx, ny);
-
-        let cellToChange = [];
-
-        for (let i = 0; i <= this.width; i++) {
-            let cell = this.cells[directions[dir](i)];
-
-            if (!cell) {
-                break;
-
-            } else if (cell.owner !== this.turn) {
-                cellToChange.push(cell);
-
-            } else if (cell.owner === this.turn || cell.owner === null) {
-                break;
-
-            }
         }
 
-        return cellToChange
+
+        for (let nut of nuts) {
+
+            const [nutX, nutY] = nut.pos();
+            const neighbors = this.getEmptyNeighborsOfCell(nutX, nutY);
+
+            neighbors.forEach(neighbor => {
+                const [x, y] = neighbor.pos();
+
+                for (let {direction, coordinates} of this.neighborsOfNutsCalculator()) {
+                    const [nx, ny] = coordinates;
+                    let tmpX = x + nx;
+                    let tmpY = y + ny;
+
+                    let currentCell = this.getCell(tmpX, tmpY);
+
+                    if (
+                        !this.isOnBoard(tmpX, tmpY) ||
+                        currentCell.owner === null ||
+                        currentCell.owner === this.turn
+                    ) {
+                        continue;
+                    }
+
+                    while (this.getCell(tmpX, tmpY).owner === rival) {
+                        tmpX += nx;
+                        tmpY += ny;
+                    }
+
+                    if (this.getCell(tmpX, tmpY).owner === this.turn) {
+                        let relatedCells = [];
+                        while (true) {
+                            if (tmpX === x && tmpY === y)
+                                break;
+
+                            tmpX -= nx;
+                            tmpY -= ny;
+
+                            relatedCells.push([tmpX, tmpY])
+
+                        }
+                        this.addMove(x, y, [nutX, nutY], direction, relatedCells)
+                    }
+                }
+            })
+        }
+
     }
 
     /**
@@ -341,14 +293,9 @@ class Board {
             throw new Error(`The move [${x},${y}] is impossible!`);
 
         const move = this.moves.find(move => move.x === x && move.y === y);
-        
-        let cellsToFlip = [];
-        move.directions.map((dir) => {
-            cellsToFlip = [...cellsToFlip, ...this.findCellsToFlip(x, y, dir)];
-        });
 
         // flip nuts of all directions together
-        cellsToFlip.map(cell => cell.owner = this.turn);
+        move.relatedCells.map(([x, y]) => this.getCell(x, y).owner = this.turn);
 
         // change turn after each placement
         this.changeTurn();
@@ -384,6 +331,47 @@ class Board {
                     "black" : "equal"
         };
 
+    }
+
+    /**
+     * Get all neighbors as coordinates. all coordinates specify a direction to nut
+     * and should add to nut coordinates to emulate direction
+     * @returns {*[]}
+     */
+    neighborsOfNutsCalculator() {
+        return [
+            {
+                direction: "topLeftToNut",
+                coordinates: [1, 1],
+            },
+            {
+                direction: "topCenterToNut",
+                coordinates: [0, 1],
+            },
+            {
+                direction: "topRightToNut",
+                coordinates: [-1, 1]
+            },
+            {
+                direction: "centerLeftToNut",
+                coordinates: [1, 0],
+            },
+            {
+                direction: "centerRightToNut",
+                coordinates: [-1, 0],
+            },
+            {
+                direction: "bottomLeftToNut",
+                coordinates: [1, -1],
+            },
+            {
+                direction: "bottomCenterToNut",
+                coordinates: [0, -1],
+            },
+            {
+                direction: "bottomRightToNut",
+                coordinates: [-1, -1],
+            }];
     }
 }
 

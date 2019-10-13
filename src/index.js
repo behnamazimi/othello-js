@@ -4,7 +4,7 @@ class OthelloGame {
 
     defaultOptions = {
         width: 8,
-        cellMaxWidth: 80,
+        cellMaxWidth: 60,
         selector: "othello",
         cellBGColor: "#43a047",
     };
@@ -16,6 +16,7 @@ class OthelloGame {
         this.board = new Board(this.options.width);
 
         this.initGame();
+
     }
 
     initGame() {
@@ -95,6 +96,7 @@ class OthelloGame {
 
             this.board.placeNutTo(x, y);
             this.reRender();
+
         }
     }
 
