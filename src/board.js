@@ -245,12 +245,13 @@ class Board {
                         continue;
                     }
 
-                    while (this.getCell(tmpX, tmpY).owner === rival) {
+                    while (this.isOnBoard(tmpX, tmpY) && this.getCell(tmpX, tmpY).owner === rival) {
                         tmpX += nx;
                         tmpY += ny;
+
                     }
 
-                    if (this.getCell(tmpX, tmpY).owner === this.turn) {
+                    if (this.isOnBoard(tmpX, tmpY) && this.getCell(tmpX, tmpY).owner === this.turn) {
                         let relatedCells = [];
                         while (true) {
                             if (tmpX === x && tmpY === y)
@@ -268,6 +269,7 @@ class Board {
             })
         }
 
+        console.log(this.moves);
     }
 
     /**
@@ -293,14 +295,14 @@ class Board {
             throw new Error(`The move [${x},${y}] is impossible!`);
 
         const move = this.moves.find(move => move.x === x && move.y === y);
-
+        // console.log(move);
         // flip nuts of all directions together
         move.relatedCells.map(([x, y]) => this.getCell(x, y).owner = this.turn);
 
         // change turn after each placement
         this.changeTurn();
         this.findMoves();
-
+        console.log(3434);
         // check valid moves after each placement
         // and change the turn again when moves are empty
         if (this.moves.length === 0) {
