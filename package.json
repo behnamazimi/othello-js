@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/behnamazimi/othello-js.git"
+    "url": "git+https://github.com/behnamazimi/othello-js.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/behnamazimi/othello-js/issues"
+    "url": "https://github.com/behnamazimi/othello-js/issues"
   },
-  "homepage": "https://gitlab.com/behnamazimi/othello-js#readme",
+  "homepage": "https://github.com/behnamazimi/othello-js#readme",
   "dependencies": {
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
